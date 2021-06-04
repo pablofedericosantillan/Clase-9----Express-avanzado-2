@@ -29,8 +29,6 @@ class Productos {
             newProduct.id=this.item[this.item.length-1].id+1;
              }
 
-          //  newProduct.id=this.item[this.item.length-].id+1;
-
             this.item.push(newProduct);
             return this.item;
 

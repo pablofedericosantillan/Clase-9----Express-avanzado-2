@@ -29,8 +29,7 @@ router.get('/listar/:id', (req, res) => {
 
 //C
 router.post('/guardar/', (req, res) => {
-    //console.log(productos.item[productos.item.length-1].id)
-productos.item=productos.guardar(req.body)//,productos.item[productos.item.length-1].id)
+productos.item=productos.guardar(req.body);
 res.send(req.body);
 });
 
