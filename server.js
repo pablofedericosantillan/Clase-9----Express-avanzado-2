@@ -3,40 +3,49 @@ const productos = require('./api/productos');
 
 // creo una app de tipo express
 const app = express();
+// incorporo el router
+const router = express.Router();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// indico donde estan los archivos estaticos
+app.use(express.static(__dirname + '/public'));
 
 
 //0
-app.get('/', (req, res) => {
-    res.send('Bienvenido al desafio Entregable de la Clase 8');
+router.get('/', (req, res) => {
+    res.send('Bienvenido al desafio Entregable de la Clase 9');
 });
 
 // A
-app.get('/api/productos/listar', (req, res) => {
-    if(productos.item.length != 0){
-        res.send(JSON.stringify(productos.item,null,'\t'));
-    }else{
-         res.send( {error: "no hay productos cargados" }) 
-    }
+router.get('/listar', (req, res) => {
+         res.json(productos.listarTodos()) 
 });
 
 //B
-app.get('/api/productos/listar/:id', (req, res) => {
-    if( req.params.id <= productos.item.length ){
-    res.send(JSON.stringify(productos.item[req.params.id-1],null,'\t'));
-    }else{
-    res.send( {error: "parametro fuera de rango'" }) 
-    }
+router.get('/listar/:id', (req, res) => {
+    res.json(productos.BuscarId(req.params.id)) 
 });
-
 
 //C
-app.post('/api/productos/guardar/', (req, res) => {
-productos.item=productos.guardar(req.body)
-res.send(JSON.stringify(productos.item[productos.item.length-1],null,'\t'));
+router.post('/guardar/', (req, res) => {
+    //console.log(productos.item[productos.item.length-1].id)
+productos.item=productos.guardar(req.body)//,productos.item[productos.item.length-1].id)
+res.send(req.body);
 });
+
+//D
+router.put('/actualizar/:id', (req, res) => {
+    res.send(productos.actualizar(req.body,req.params.id))
+    });
+//E
+router.delete('/borrar/:id', (req, res) => {
+    res.send(productos.borrar(req.params.id));
+
+});
+
+
+app.use('/api/productos', router);
 
 // pongo a escuchar el servidor en el puerto indicado
 const puerto = 8080;
